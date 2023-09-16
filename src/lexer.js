@@ -11,21 +11,21 @@ function token(value, type) {
 /**
  * Returns whether the character passed in alphabetic -> [a-zA-Z]
  */
-function isalpha(str) {
+function isAlpha(str) {
   return str.toUpperCase() != str.toLowerCase();
 }
 
 /**
  * Returns true if the character is whitespace like -> [\s, \t, \n]
  */
-function isskippable(str) {
+function isSkippable(str) {
   return str == " " || str == "\n" || str == "\t";
 }
 
 /**
  Return whether the character is a valid integer -> [0-9]
  */
-function isint(str) {
+function isInt(str) {
   const c = str.charCodeAt(0);
   const bounds = ["0".charCodeAt(0), "9".charCodeAt(0)];
   return c >= bounds[0] && c <= bounds[1];
@@ -57,7 +57,7 @@ function tokenize(sourceCode) {
       // Handle numeric literals -> Integers
       if (isInt(src[0])) {
         let num = "";
-        while (src.length > 0 && isint(src[0])) {
+        while (src.length > 0 && isInt(src[0])) {
           num += src.shift();
         }
 
@@ -71,7 +71,7 @@ function tokenize(sourceCode) {
         }
 
         // CHECK FOR RESERVED KEYWORDS
-        const reserved = KEYWORDS[ident];
+        const reserved = KEYWORDS[str];
         // If value is not undefined then the identifier is a reconized keyword
         if (reserved) {
           tokens.push(token(str, reserved));
@@ -97,3 +97,5 @@ function tokenize(sourceCode) {
 
   return tokens;
 }
+
+module.exports = tokenize;
