@@ -6,7 +6,7 @@ class Parser {
   }
 
   // makes sure it's not the end of file
-  not_eof() {
+  notEof() {
     return this.tokens[0].type !== "EOF";
   }
 
@@ -15,21 +15,41 @@ class Parser {
     return this.tokens[0];
   }
 
-  // gets current token and advances to the next token
+  // returns current token and advances to the next token
   next() {
     return this.tokens.shift();
   }
 
-  parse_statement() {
-    // skip to parse_expr
-    return this.parse_expr();
+  parseStatement() {
+    // skip to parseExpr
+    return this.parseExpr();
   }
 
-  parse_expr() {
-    return this.parse_primary_expr();
+  parseExpr() {
+    return this.parseAdditiveExpr();
   }
 
-  parse_primary_expr() {
+  // Need to handle orders of precedence
+  // primary expression -> unary -> Multiplicative -> additive -> comparisons -> logical
+
+  parseAdditiveExpr() {
+    let left = this.parsePrimaryExpr();
+
+    while (this.at().value == "+" || this.at().value === "-") {
+      const operator = this.next().value;
+      const right = this.parsePrimaryExpr();
+      left = {
+        type: "BinaryExpr",
+        left,
+        right,
+        operator,
+      };
+    }
+
+    return left;
+  }
+
+  parsePrimaryExpr() {
     const token = this.at().type;
 
     switch (token) {
@@ -51,8 +71,8 @@ class Parser {
     const program = { type: "Program", body: [] };
 
     // parse until end of the file is reached
-    while (this.not_eof()) {
-      program.body.push(this.parse_statement());
+    while (this.notEof()) {
+      program.body.push(this.parseStatement());
     }
 
     return program;
