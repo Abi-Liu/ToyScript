@@ -20,6 +20,15 @@ class Parser {
     return this.tokens.shift();
   }
 
+  expect(char, err) {
+    const prev = this.tokens.shift();
+    if (!prev || prev.type == type) {
+      console.error(`Expected ${char}, received ${prev}`);
+      process.exit(1);
+    }
+    return prev;
+  }
+
   parseStatement() {
     // skip to parseExpr
     return this.parseExpr();
@@ -87,6 +96,11 @@ class Parser {
           type: "NumericaLiteral",
           value: parseFloat(this.next().value),
         };
+      case "OpenParen":
+        this.next(); // move to the token after the '('
+        const value = this.parseExpr();
+        this.next(); // this is to move past the ')' token
+        return value;
       default:
         console.error("Unexpected token found during parsing", this.at());
         process.exit(1);
