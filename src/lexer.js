@@ -85,16 +85,12 @@ function tokenize(sourceCode) {
       } // Handle unreconized characters.
       // TODO: Impliment better errors and error recovery.
       else {
-        console.error(
-          "Unreconized character found in source: ",
-          src[0].charCodeAt(0),
-          src[0]
-        );
+        console.error("Unreconized character found in source: ", src[0]);
         process.exit(1);
       }
     }
   }
-
+  tokens.push({ value: "EOF", type: "EOF" });
   return tokens;
 }
 

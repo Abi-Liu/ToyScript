@@ -1,7 +1,8 @@
 const lexer = require("./lexer");
+const Parser = require("./parser");
 
-const input = "let x = 45";
+const input = "x 45";
 
-const tokens = lexer(input);
+const parser = new Parser();
 
-console.log(tokens);
+console.log(parser.produceAST(input));
