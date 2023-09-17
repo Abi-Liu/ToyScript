@@ -31,11 +31,38 @@ class Parser {
 
   // Need to handle orders of precedence
   // primary expression -> unary -> Multiplicative -> additive -> comparisons -> logical
+  // the more precedence an expression has, the further down the tree we want to parse it
 
+  // + - binary expressions
+  // because this has the less precendence than multiplication, we the left hand side will call parseMultiplicativeExpr. If the expression is not a multiplication expression, then it will just return the original left hand value.
   parseAdditiveExpr() {
-    let left = this.parsePrimaryExpr();
+    let left = this.parseMultiplicativeExpr();
 
     while (this.at().value == "+" || this.at().value === "-") {
+      const operator = this.next().value;
+      const right = this.parseMultiplicativeExpr();
+      left = {
+        type: "BinaryExpr",
+        left,
+        right,
+        operator,
+      };
+    }
+
+    return left;
+  }
+
+  // * / and % binary expressions.
+  // because primary expressions have the most precedence, we will call that to be the left value
+
+  parseMultiplicativeExpr() {
+    let left = this.parsePrimaryExpr();
+
+    while (
+      this.at().value == "*" ||
+      this.at().value === "/" ||
+      this.at().value === "%"
+    ) {
       const operator = this.next().value;
       const right = this.parsePrimaryExpr();
       left = {

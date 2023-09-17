@@ -47,7 +47,13 @@ function tokenize(sourceCode) {
     } else if (src[0] == ")") {
       tokens.push(token(src.shift(), "CloseParen"));
     } // HANDLE BINARY OPERATORS
-    else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/") {
+    else if (
+      src[0] == "+" ||
+      src[0] == "-" ||
+      src[0] == "*" ||
+      src[0] == "/" ||
+      src[0] == "%"
+    ) {
       tokens.push(token(src.shift(), "BinaryOperator"));
     } // Handle Conditional & Assignment Tokens
     else if (src[0] == "=") {
