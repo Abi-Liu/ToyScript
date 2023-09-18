@@ -101,9 +101,6 @@ class Parser {
         const value = this.parseExpr();
         this.expect("CloseParen"); // this is to move past the ')' token
         return value;
-      case "Null":
-        this.next(); // to move past null keyword
-        return { type: "NullLiteral", value: "null}" };
       default:
         console.error("Unexpected token found during parsing", this.at());
         process.exit(1);
