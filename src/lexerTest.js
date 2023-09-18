@@ -1,10 +1,10 @@
-const lexer = require("./lexer");
 const Parser = require("./parser");
+const evaluator = require("./Runtime/evaluator");
 
-const input = "null";
+const input = "10+5";
 
 const parser = new Parser();
 
-let res = parser.produceAST(input);
+let program = parser.produceAST(input);
 
-console.dir(res);
+console.log(program);
