@@ -4,7 +4,11 @@ const Environment = require("./Runtime/environment");
 
 const env = new Environment(null);
 env.declareVar("x", { value: 100, type: "number" });
-const input = "x+5";
+// creating true false and null values inside the global runtime
+env.declareVar("true", { value: true, type: "boolean" });
+env.declareVar("false", { value: false, type: "boolean" });
+env.declareVar("null", { value: null, type: "null" });
+const input = "null";
 
 const parser = new Parser();
 

@@ -1,7 +1,6 @@
 // reserved keywords
 const KEYWORDS = {
   let: "Let",
-  null: "Null",
 };
 
 // Returns a token of a given type and value
