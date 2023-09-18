@@ -63,8 +63,7 @@ function evaluate(ast) {
       return evaluateProgram(ast);
 
     default:
-      console.log(ast.type);
-      console.error("Unrecognized AST Node");
+      console.error(`Unrecognized AST Node: ${ast}`);
       process.exit(1);
   }
 }

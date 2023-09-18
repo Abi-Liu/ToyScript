@@ -1,7 +1,7 @@
 const Parser = require("./parser");
 const evaluate = require("./Runtime/evaluator");
 
-const input = "10+5";
+const input = "asdf";
 
 const parser = new Parser();
 
