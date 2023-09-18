@@ -1,6 +1,7 @@
 function evaluateProgram(program) {
   let lastEvaluated = { type: "null", value: "null" };
 
+  // evaluates each child node in the AST
   for (const statement of program.body) {
     lastEvaluated = evaluate(statement);
   }
@@ -8,10 +9,13 @@ function evaluateProgram(program) {
   return lastEvaluated;
 }
 
+// in the case that either left or right is another binary expression
+// it will continue to recursively call itself until it gets down to the base case where both left and right are numeric literals
+// and bubble back up to get the numeric values of the original binary expressions
 function evaluateBinary(binary) {
   const left = evaluate(binary.left);
   const right = evaluate(binary.right);
-
+  // makes sure that both left and right hand side are number values
   if (left.type === "number" && right.type === "number") {
     return evaluateNumericBinary(left, right, binary.operator);
   } else {
@@ -22,11 +26,11 @@ function evaluateBinary(binary) {
 function evaluateNumericBinary(left, right, operator) {
   let res = 0;
   if (operator === "+") {
-    result = left.value + right.value;
+    res = left.value + right.value;
   } else if (operator === "-") {
-    result = left.value - right.value;
+    res = left.value - right.value;
   } else if (operator === "*") {
-    result = left.value * right.value;
+    res = left.value * right.value;
   } else if (operator === "/") {
     if (right.value === 0) {
       console.error("Cannot divide by 0");
@@ -59,6 +63,7 @@ function evaluate(ast) {
       return evaluateProgram(ast);
 
     default:
+      console.log(ast.type);
       console.error("Unrecognized AST Node");
       process.exit(1);
   }

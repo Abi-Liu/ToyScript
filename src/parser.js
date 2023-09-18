@@ -93,7 +93,7 @@ class Parser {
         return { type: "Identifier", symbol: this.next().value };
       case "Number":
         return {
-          type: "NumericaLiteral",
+          type: "NumericLiteral",
           value: parseFloat(this.next().value),
         };
       case "OpenParen":
