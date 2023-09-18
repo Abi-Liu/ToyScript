@@ -8,7 +8,7 @@ env.declareVar("x", { value: 100, type: "number" });
 env.declareVar("true", { value: true, type: "boolean" });
 env.declareVar("false", { value: false, type: "boolean" });
 env.declareVar("null", { value: null, type: "null" });
-const input = "null";
+const input = "const f = 5 f + 3";
 
 const parser = new Parser();
 

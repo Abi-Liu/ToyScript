@@ -20,10 +20,10 @@ class Parser {
     return this.tokens.shift();
   }
 
-  expect(type) {
+  expect(type, msg) {
     const prev = this.tokens.shift();
-    if (!prev || prev.type != type) {
-      console.error(`Expected ${type}, received ${prev}`);
+    if (!prev || prev.type !== type) {
+      console.error(`${msg}`);
       process.exit(1);
     }
     return prev;
@@ -31,7 +31,49 @@ class Parser {
 
   parseStatement() {
     // skip to parseExpr
-    return this.parseExpr();
+    // return this.parseExpr();
+    switch (this.at().type) {
+      case "Let":
+      case "Const":
+        return this.parseVarDeclaration();
+      default:
+        return this.parseExpr();
+    }
+  }
+
+  parseVarDeclaration() {
+    // true if const, false if let
+    const isConst = this.next().type == "Const";
+    // after a let/const there needs to be a variable identifier
+    const identifier = this.expect(
+      "Identifier",
+      `Expected identifier after a variable declaration statement`
+    ).value;
+
+    if (this.at().type === "Semicolon") {
+      this.next(); // Move past semicolon
+      if (isConst) {
+        throw new Error("Must assign value to a constant variable");
+      } else {
+        return {
+          type: "VariableDeclaration",
+          identifier,
+          constant: isConst,
+          value: undefined,
+        };
+      }
+    }
+    this.expect(
+      "Equals",
+      "Expected '=' after identifier in variable declaration"
+    );
+    const value = this.parseExpr();
+    return {
+      type: "VariableDeclaration",
+      constant: isConst,
+      value,
+      identifier,
+    };
   }
 
   parseExpr() {
@@ -99,7 +141,7 @@ class Parser {
       case "OpenParen":
         this.next(); // move to the token after the '('
         const value = this.parseExpr();
-        this.expect("CloseParen"); // this is to move past the ')' token
+        this.expect("CloseParen", "Missing closing parentheses"); // this is to move past the ')' token
         return value;
       default:
         console.error("Unexpected token found during parsing", this.at());

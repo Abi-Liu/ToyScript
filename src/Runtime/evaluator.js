@@ -53,6 +53,14 @@ function evaluateIdentifier(identifier, env) {
   return val;
 }
 
+function evaluateVarDeclaration(variable, env) {
+  const value = variable.value
+    ? evaluate(variable.value, env)
+    : { type: "null", value: null };
+
+  return env.declareVar(variable.identifier, value);
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -63,6 +71,9 @@ function evaluate(ast, env) {
 
     case "BinaryExpr":
       return evaluateBinary(ast, env);
+
+    case "VariableDeclaration":
+      return evaluateVarDeclaration(ast, env);
 
     case "Program":
       return evaluateProgram(ast, env);

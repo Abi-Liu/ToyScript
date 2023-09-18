@@ -1,6 +1,7 @@
 // reserved keywords
 const KEYWORDS = {
   let: "Let",
+  const: "Const",
 };
 
 // Returns a token of a given type and value
@@ -58,6 +59,8 @@ function tokenize(sourceCode) {
     } // Handle Conditional & Assignment Tokens
     else if (src[0] == "=") {
       tokens.push(token(src.shift(), "Equals"));
+    } else if (src[0] == ";") {
+      tokens.push(token(src.shift(), "Semicolon"));
     } // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
     else {
       // Handle numeric literals -> Integers
