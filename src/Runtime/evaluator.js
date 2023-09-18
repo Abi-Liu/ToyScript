@@ -58,7 +58,7 @@ function evaluateVarDeclaration(variable, env) {
     ? evaluate(variable.value, env)
     : { type: "null", value: null };
 
-  return env.declareVar(variable.identifier, value);
+  return env.declareVar(variable.identifier, value, variable.constant);
 }
 
 function evaluate(ast, env) {

@@ -1,22 +1,31 @@
 class Environment {
   constructor(parent) {
     this.variables = new Map();
+    this.constants = new Set();
     this.parent = parent;
   }
 
   // method to declare a new variable.
   // Checks to make sure variable isn't already defined in the current scope
-  declareVar(variable, value) {
+  declareVar(variable, value, constant) {
     if (this.variables.has(variable)) {
       throw new Error(`Cannot redeclare block scoped variable ${variable}`);
     } else {
       this.variables.set(variable, value);
+      if (constant) {
+        this.constants.add(variable);
+      }
       return value;
     }
   }
 
   assignVar(variable, value) {
     const env = this.lookup(variable);
+
+    // cannot reassign constant var
+    if (env.constants.has(variable)) {
+      throw new Error("Cannot reassign a constant variable: " + variable);
+    }
     env.variables.set(variable, value);
     return value;
   }
