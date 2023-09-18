@@ -1,7 +1,7 @@
 const lexer = require("./lexer");
 const Parser = require("./parser");
 
-const input = "5+(5+10*3)";
+const input = "null";
 
 const parser = new Parser();
 

@@ -22,7 +22,6 @@ class Parser {
 
   expect(type) {
     const prev = this.tokens.shift();
-    console.log(prev.type, type);
     if (!prev || prev.type != type) {
       console.error(`Expected ${type}, received ${prev}`);
       process.exit(1);
@@ -102,6 +101,9 @@ class Parser {
         const value = this.parseExpr();
         this.expect("CloseParen"); // this is to move past the ')' token
         return value;
+      case "Null":
+        this.next(); // to move past null keyword
+        return { type: "NullLiteral", value: "null}" };
       default:
         console.error("Unexpected token found during parsing", this.at());
         process.exit(1);
