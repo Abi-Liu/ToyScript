@@ -69,6 +69,15 @@ function evaluateAssignment(variable, env) {
   return env.assignVar(variable.assignee.symbol, value);
 }
 
+function evaluateObject(obj, env) {
+  const object = { type: "object", properties: new Map() };
+  for (const { key, value } of obj.properties) {
+    const runtimeVal = evaluate(value, env);
+    object.properties.set(key, runtimeVal);
+  }
+  return object;
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -82,6 +91,9 @@ function evaluate(ast, env) {
 
     case "VariableDeclaration":
       return evaluateVarDeclaration(ast, env);
+
+    case "ObjectLiteral":
+      return evaluateObject(ast, env);
 
     case "AssignmentExpr":
       return evaluateAssignment(ast, env);
