@@ -17,10 +17,10 @@ function isAlpha(str) {
 }
 
 /**
- * Returns true if the character is whitespace like -> [\s, \t, \n]
+ * Returns true if the character is whitespace like -> [\s, \t, \n, \r]
  */
 function isSkippable(str) {
-  return str == " " || str == "\n" || str == "\t";
+  return str == " " || str == "\n" || str == "\t" || str == "\r";
 }
 
 /**
@@ -47,7 +47,12 @@ function tokenize(sourceCode) {
       tokens.push(token(src.shift(), "OpenParen"));
     } else if (src[0] == ")") {
       tokens.push(token(src.shift(), "CloseParen"));
-    } // HANDLE BINARY OPERATORS
+    } else if (src[0] == "{") {
+      tokens.push(token(src.shift(), "OpenCurly"));
+    } else if (src[0] == "}") {
+      tokens.push(token(src.shift(), "CloseCurly"));
+    }
+    // HANDLE BINARY OPERATORS
     else if (
       src[0] == "+" ||
       src[0] == "-" ||
@@ -61,7 +66,12 @@ function tokenize(sourceCode) {
       tokens.push(token(src.shift(), "Equals"));
     } else if (src[0] == ";") {
       tokens.push(token(src.shift(), "Semicolon"));
-    } // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
+    } else if (src[0] == ":") {
+      tokens.push(token(src.shift(), "Colon"));
+    } else if (src[0] == ",") {
+      tokens.push(token(src.shift(), "Comma"));
+    }
+    // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
     else {
       // Handle numeric literals -> Integers
       if (isInt(src[0])) {

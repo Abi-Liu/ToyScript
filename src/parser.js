@@ -30,8 +30,6 @@ class Parser {
   }
 
   parseStatement() {
-    // skip to parseExpr
-    // return this.parseExpr();
     switch (this.at().type) {
       case "Let":
       case "Const":
@@ -81,7 +79,7 @@ class Parser {
   }
 
   parseAssignmentExpr() {
-    const left = this.parseAdditiveExpr();
+    const left = this.parseObjectExpr();
     if (this.at().type == "Equals") {
       this.next();
       const value = this.parseAssignmentExpr();
@@ -89,6 +87,31 @@ class Parser {
     }
 
     return left;
+  }
+
+  parseObjectExpr() {
+    if (this.at().type !== "OpenCurly") {
+      return this.parseAdditiveExpr();
+    }
+    this.next(); // move past '{'
+    const properties = [];
+    // {key: value, key1: value2}
+    while (this.notEof() && this.at().type !== "CloseCurly") {
+      const key = this.expect(
+        "Identifier",
+        "Object key must be a string"
+      ).value;
+
+      this.expect("Colon", "Missing colon in object key value pair");
+      const value = this.parseExpr();
+      properties.push({ type: "Property", value, key });
+
+      if (this.at().type !== "CloseCurly") {
+        this.expect("Comma", "Missing comma separating key value pairs");
+      }
+    }
+    this.expect("CloseCurly", "Object literal missing closing curly brace");
+    return { type: "ObjectLiteral", properties };
   }
 
   // Need to handle orders of precedence
