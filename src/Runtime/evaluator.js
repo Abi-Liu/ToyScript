@@ -61,6 +61,11 @@ function evaluateVarDeclaration(variable, env) {
   return env.declareVar(variable.identifier, value, variable.constant);
 }
 
+function evaluateAssignmentExpr(variable, env) {
+  const value = evaluate(variable.value, env);
+  return env.assignVar(variable.assignee.symbol, value.value);
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -74,6 +79,9 @@ function evaluate(ast, env) {
 
     case "VariableDeclaration":
       return evaluateVarDeclaration(ast, env);
+
+    case "AssignmentExpr":
+      return evaluateAssignmentExpr(ast, env);
 
     case "Program":
       return evaluateProgram(ast, env);

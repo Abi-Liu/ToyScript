@@ -77,7 +77,18 @@ class Parser {
   }
 
   parseExpr() {
-    return this.parseAdditiveExpr();
+    return this.parseAssignmentExpr();
+  }
+
+  parseAssignmentExpr() {
+    const left = this.parseAdditiveExpr();
+    if (this.at().type == "Equals") {
+      this.next();
+      const value = this.parseAssignmentExpr();
+      return { value, type: "AssignmentExpr", assignee: left };
+    }
+
+    return left;
   }
 
   // Need to handle orders of precedence
