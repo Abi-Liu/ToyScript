@@ -53,7 +53,7 @@ class Parser {
     if (this.at().type === "Semicolon") {
       this.next(); // Move past semicolon
       if (isConst) {
-        throw new Error("Must assign value to a constant variable");
+        throw "Must assign value to a constant variable";
       } else {
         return {
           type: "VariableDeclaration",

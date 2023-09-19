@@ -61,9 +61,12 @@ function evaluateVarDeclaration(variable, env) {
   return env.declareVar(variable.identifier, value, variable.constant);
 }
 
-function evaluateAssignmentExpr(variable, env) {
+function evaluateAssignment(variable, env) {
+  if (variable.assignee.type !== "Identifier") {
+    throw "Invalid assignment indentifier variable";
+  }
   const value = evaluate(variable.value, env);
-  return env.assignVar(variable.assignee.symbol, value.value);
+  return env.assignVar(variable.assignee.symbol, value);
 }
 
 function evaluate(ast, env) {
@@ -81,7 +84,7 @@ function evaluate(ast, env) {
       return evaluateVarDeclaration(ast, env);
 
     case "AssignmentExpr":
-      return evaluateAssignmentExpr(ast, env);
+      return evaluateAssignment(ast, env);
 
     case "Program":
       return evaluateProgram(ast, env);

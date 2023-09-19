@@ -9,7 +9,7 @@ class Environment {
   // Checks to make sure variable isn't already defined in the current scope
   declareVar(variable, value, constant) {
     if (this.variables.has(variable)) {
-      throw new Error(`Cannot redeclare block scoped variable ${variable}`);
+      throw `Cannot redeclare block scoped variable ${variable}`;
     } else {
       this.variables.set(variable, value);
       if (constant) {
@@ -21,10 +21,10 @@ class Environment {
 
   assignVar(variable, value) {
     const env = this.lookup(variable);
-
+    // console.log(variable, value);
     // cannot reassign constant var
     if (env.constants.has(variable)) {
-      throw new Error("Cannot reassign a constant variable: " + variable);
+      throw "Cannot reassign a constant variable: " + variable;
     }
     env.variables.set(variable, value);
     return value;
@@ -38,7 +38,7 @@ class Environment {
     }
 
     if (this.parent == undefined) {
-      throw new Error(`Undefined variable: ${variable}`);
+      throw `Undefined variable: ${variable}`;
     }
 
     return this.parent.lookup(variable);
