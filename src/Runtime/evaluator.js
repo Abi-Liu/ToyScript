@@ -36,13 +36,13 @@ function evaluateNumericBinary(left, right, operator) {
       console.error("Cannot divide by 0");
       process.exit(1);
     }
-    result = left.value / right.value;
+    res = left.value / right.value;
   } else if (operator === "%") {
     if (right.value === 0) {
       console.error("Cannot divide by 0");
       process.exit(1);
     }
-    result = left.value % right.value;
+    res = left.value % right.value;
   }
 
   return { value: res, type: "number" };
