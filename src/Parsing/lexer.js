@@ -104,10 +104,9 @@ function tokenize(sourceCode) {
         // Skip unneeded chars.
         src.shift();
       } // Handle unreconized characters.
-      // TODO: Impliment better errors and error recovery.
       else {
         console.error("Unreconized character found in source: ", src[0]);
-        process.exit(1);
+        break;
       }
     }
   }
