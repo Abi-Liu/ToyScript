@@ -1,5 +1,5 @@
 const repl = require("repl");
-const Parser = require("./parser");
+const Parser = require("./Parsing/parser");
 const evaluate = require("./Runtime/evaluator");
 const Environment = require("./Runtime/environment");
 
