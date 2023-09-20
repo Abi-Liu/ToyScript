@@ -214,7 +214,7 @@ class Parser {
     while (this.at().type == "Period") {
       this.next();
 
-      property = this.parsePrimaryExpr();
+      let property = this.parsePrimaryExpr();
       if (property.type !== "Identifier") {
         throw "Cannot use dot operator without identifier";
       }
