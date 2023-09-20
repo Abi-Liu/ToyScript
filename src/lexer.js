@@ -70,6 +70,8 @@ function tokenize(sourceCode) {
       tokens.push(token(src.shift(), "Colon"));
     } else if (src[0] == ",") {
       tokens.push(token(src.shift(), "Comma"));
+    } else if (src[0] == ".") {
+      tokens.push(token(src.shift(), "Period"));
     }
     // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
     else {

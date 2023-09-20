@@ -141,7 +141,7 @@ class Parser {
   // because primary expressions have the most precedence, we will call that to be the left value
 
   parseMultiplicativeExpr() {
-    let left = this.parsePrimaryExpr();
+    let left = this.parseCallMemberExpr();
 
     while (
       this.at().value == "*" ||
@@ -149,7 +149,7 @@ class Parser {
       this.at().value === "%"
     ) {
       const operator = this.next().value;
-      const right = this.parsePrimaryExpr();
+      const right = this.parseCallMemberExpr();
       left = {
         type: "BinaryExpr",
         left,
@@ -159,6 +159,69 @@ class Parser {
     }
 
     return left;
+  }
+
+  // example: foo.bar()
+  // we need to first evaluate foo.bar before checking for parentheses
+  parseCallMemberExpr() {
+    const member = this.parseMemberExpr();
+
+    if (this.at().type === "OpenParen") {
+      return this.parseCallExpr(member);
+    }
+
+    return member;
+  }
+
+  parseCallExpr(caller) {
+    let callExpression = {
+      type: "CallExpr",
+      caller,
+      ars: this.parseArgs(),
+    };
+
+    if (this.at().type == "OpenParen") {
+      callExpression = this.parseCallExpr(callExpression);
+    }
+    return callExpression;
+  }
+
+  // function add(x,y) - these are PARAMETERS
+  // this function is for when you call a function
+  // add(5, 2) - these are ARGUMENTS
+  parseArgs() {
+    this.expect("OpenParen", "Expected open parenthesis");
+    const args = this.at().type == "CloseParen" ? [] : this.parseArgsList();
+    this.expect("CloseParen", "Missing closing parentheses in function call");
+
+    return args;
+  }
+
+  parseArgsList() {
+    const args = [this.parseExpr()];
+
+    while (this.notEof() && this.at().type == "Comma") {
+      this.next();
+      args.push(this.parseExpr());
+    }
+
+    return args;
+  }
+
+  parseMemberExpr() {
+    let object = this.parsePrimaryExpr();
+
+    while (this.at().type == "Period") {
+      this.next();
+
+      property = this.parsePrimaryExpr();
+      if (property.type !== "Identifier") {
+        throw "Cannot use dot operator without identifier";
+      }
+      object = { type: "MemberExpr", object, property };
+    }
+
+    return object;
   }
 
   parsePrimaryExpr() {
