@@ -78,6 +78,28 @@ function evaluateObject(obj, env) {
   return object;
 }
 
+function evaluateMember(member, env) {
+  console.log(member);
+  let objectValue = evaluate(member.object, env);
+
+  // Ensure that the object is of type 'object'
+  if (objectValue.type !== "object") {
+    console.error(`Cannot access member of non-object: ${objectValue.type}`);
+    process.exit(1);
+  }
+
+  const property = member.property.symbol;
+
+  // Check if the member exists in the object's properties
+  if (!objectValue.properties.has(property)) {
+    console.error(`Member not found: ${property}`);
+    process.exit(1);
+  }
+
+  // Retrieve and return the member's value
+  return objectValue.properties.get(property);
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -94,6 +116,9 @@ function evaluate(ast, env) {
 
     case "ObjectLiteral":
       return evaluateObject(ast, env);
+
+    case "MemberExpr":
+      return evaluateMember(ast, env);
 
     case "AssignmentExpr":
       return evaluateAssignment(ast, env);
