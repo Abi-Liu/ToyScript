@@ -79,25 +79,27 @@ function evaluateObject(obj, env) {
 }
 
 function evaluateMember(member, env) {
-  console.log(member);
+  // recursively go down the members if there are nested objects => x.one.two
   let objectValue = evaluate(member.object, env);
 
   // Ensure that the object is of type 'object'
+  // i.e let x = 4;
+  // x.one
+  // typeof x !== 'object' thus we throw an error message
   if (objectValue.type !== "object") {
     console.error(`Cannot access member of non-object: ${objectValue.type}`);
-    process.exit(1);
   }
-
-  const property = member.property.symbol;
+  // Get the member name from the member expression (e.g., 'two' in x.one.two)
+  const memberName = member.property.symbol;
 
   // Check if the member exists in the object's properties
-  if (!objectValue.properties.has(property)) {
-    console.error(`Member not found: ${property}`);
+  if (!objectValue.properties.has(memberName)) {
+    console.error(`Member not found: ${memberName}`);
     process.exit(1);
   }
 
   // Retrieve and return the member's value
-  return objectValue.properties.get(property);
+  return objectValue.properties.get(memberName);
 }
 
 function evaluate(ast, env) {
