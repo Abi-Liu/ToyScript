@@ -34,9 +34,53 @@ class Parser {
       case "Let":
       case "Const":
         return this.parseVarDeclaration();
+      case "Function":
+        return this.parseFuncDeclaration();
       default:
         return this.parseExpr();
     }
+  }
+
+  parseFuncDeclaration() {
+    this.next(); // move past the fn keyword
+    const name = this.expect(
+      "Identifier",
+      "Invalid function name. Function name must be a valid identifier"
+    ).value;
+
+    const parameters = this.parseParams();
+    this.expect(
+      "CloseParen",
+      "Missing close parentheses after parameters list"
+    );
+
+    const body = this.parseFuncBody();
+
+    const fn = {
+      type: "function",
+      name,
+      parameters,
+    };
+  }
+
+  parseParams() {
+    this.expect(
+      "OpenParen",
+      "Missing parameter list after function declaration"
+    );
+    let params;
+    // if the next token is ')' we know there are no parameters
+    if (this.at().type == "CloseParen") {
+      params = [];
+    } else {
+      params = [this.parseExpr()];
+      // loop until we no longer have any commas, therefore there are no more parameters and we are likely at a ')'
+      while (this.notEof && this.at().type == "Comma") {
+        this.next(); // move past comma
+        params.push(this.parseExpr());
+      }
+    }
+    return params;
   }
 
   parseVarDeclaration() {
@@ -177,7 +221,7 @@ class Parser {
     let callExpression = {
       type: "CallExpr",
       caller,
-      ars: this.parseArgs(),
+      args: this.parseArgs(),
     };
 
     if (this.at().type == "OpenParen") {

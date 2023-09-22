@@ -2,6 +2,7 @@
 const KEYWORDS = {
   let: "Let",
   const: "Const",
+  fn: "Function",
 };
 
 // Returns a token of a given type and value
