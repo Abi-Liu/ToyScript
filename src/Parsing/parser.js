@@ -23,8 +23,7 @@ class Parser {
   expect(type, msg) {
     const prev = this.tokens.shift();
     if (!prev || prev.type !== type) {
-      console.error(`${msg}`);
-      process.exit(1);
+      throw new Error(`${msg}`);
     }
     return prev;
   }
@@ -303,8 +302,7 @@ class Parser {
         this.expect("CloseParen", "Missing closing parentheses"); // this is to move past the ')' token
         return value;
       default:
-        console.error("Unexpected token found during parsing", this.at());
-        process.exit(1);
+        throw new Error("Unexpected token found during parsing", this.at());
     }
   }
 
