@@ -45,8 +45,10 @@ describe("Lexer test", () => {
     ]);
   });
 
-  test("for operators and unrecognized tokens", () => {
-    const input = "+/%*- @#";
-    console.log(lexer(input));
+  test("Throws error on unrecognized token", () => {
+    const input = "let $var = 42;";
+    expect(() => {
+      lexer(input);
+    }).toThrowError("Unrecognized character found in source: $");
   });
 });

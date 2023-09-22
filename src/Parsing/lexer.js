@@ -106,8 +106,7 @@ function tokenize(sourceCode) {
         src.shift();
       } // Handle unreconized characters.
       else {
-        console.error("Unreconized character found in source: ", src[0]);
-        break;
+        throw new Error(`Unrecognized character found in source: ${src[0]}`);
       }
     }
   }

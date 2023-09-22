@@ -60,7 +60,10 @@ class Parser {
       type: "function",
       name,
       parameters,
+      body,
     };
+
+    return fn;
   }
 
   parseParams() {
@@ -75,12 +78,27 @@ class Parser {
     } else {
       params = [this.parseExpr()];
       // loop until we no longer have any commas, therefore there are no more parameters and we are likely at a ')'
-      while (this.notEof && this.at().type == "Comma") {
+      while (this.notEof() && this.at().type == "Comma") {
         this.next(); // move past comma
         params.push(this.parseExpr());
       }
     }
     return params;
+  }
+
+  parseFuncBody() {
+    this.expect(
+      "OpenCurly",
+      "Missing open curly brace to define function body"
+    );
+    if (this.at().type === "CloseCurly") {
+      throw "Missing function body";
+    }
+    const body = [];
+    while (this.notEof() && this.at().type !== "CloseCurly") {
+      body.push(this.parseExpr());
+    }
+    return body;
   }
 
   parseVarDeclaration() {
