@@ -97,6 +97,10 @@ class Parser {
     while (this.notEof() && this.at().type !== "CloseCurly") {
       body.push(this.parseExpr());
     }
+    this.expect(
+      "CloseCurly",
+      "Missing closing curly brace after function body"
+    );
     return body;
   }
 
@@ -302,7 +306,9 @@ class Parser {
         this.expect("CloseParen", "Missing closing parentheses"); // this is to move past the ')' token
         return value;
       default:
-        throw new Error("Unexpected token found during parsing", this.at());
+        throw new Error(
+          `Unexpected token found during parsing ${JSON.stringify(this.at())}`
+        );
     }
   }
 

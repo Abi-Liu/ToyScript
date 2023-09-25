@@ -126,7 +126,7 @@ function evaluateCallExpr(expr, env) {
   // for loop to declare the arguments as variables in the new scope
   for (let i = 0; i < fn.parameters.length; i++) {
     const name = fn.parameters[i];
-    scope.declareVar(name, args[i], false);
+    scope.declareVar(name.symbol, args[i], false);
   }
 
   let result;
