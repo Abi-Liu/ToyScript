@@ -129,7 +129,8 @@ function evaluateCallExpr(expr, env) {
     scope.declareVar(name.symbol, args[i], false);
   }
 
-  let result;
+  // in case function body is empty
+  let result = { type: "null", value: "null" };
   // evaluates the body line by line
   for (const stmt of fn.body) {
     result = evaluate(stmt, scope);
