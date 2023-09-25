@@ -1,3 +1,5 @@
+const Environment = require("./environment");
+
 function evaluateProgram(program, env) {
   let lastEvaluated = { type: "null", value: "null" };
 
@@ -102,6 +104,40 @@ function evaluateMember(member, env) {
   return objectValue.properties.get(memberName);
 }
 
+function evaluateFunctionDeclaration(declaration, env) {
+  const fn = {
+    type: "function",
+    name: declaration.name,
+    parameters: declaration.parameters,
+    body: declaration.body,
+    env,
+  };
+
+  env.declareVar(declaration.name, fn, true);
+}
+
+function evaluateCallExpr(expr, env) {
+  // map all the arguments to the value of the arguments
+  const args = expr.args.map((arg) => evaluate(arg, env));
+  const fn = evaluate(expr.caller, env);
+
+  // here is where we create a new scope for the function run time. it's parent env is the scope in which it was declared in.
+  const scope = new Environment(fn.env);
+  // for loop to declare the arguments as variables in the new scope
+  for (let i = 0; i < fn.parameters.length; i++) {
+    const name = fn.parameters[i];
+    scope.declareVar(name, args[i], false);
+  }
+
+  let result;
+  // evaluates the body line by line
+  for (const stmt of fn.body) {
+    result = evaluate(stmt, scope);
+  }
+  // the final line in the body is what will be returned.
+  return result;
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -124,6 +160,12 @@ function evaluate(ast, env) {
 
     case "AssignmentExpr":
       return evaluateAssignment(ast, env);
+
+    case "FunctionDeclaration":
+      return evaluateFunctionDeclaration(ast, env);
+
+    case "CallExpr":
+      return evaluateCallExpr(ast, env);
 
     case "Program":
       return evaluateProgram(ast, env);

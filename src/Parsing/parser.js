@@ -56,7 +56,7 @@ class Parser {
     const body = this.parseFuncBody();
 
     const fn = {
-      type: "function",
+      type: "FunctionDeclaration",
       name,
       parameters,
       body,
