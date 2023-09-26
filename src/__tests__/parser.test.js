@@ -251,4 +251,30 @@ describe("Parser tests", () => {
       type: "Program",
     });
   });
+
+  test("for single quote strings", () => {
+    const input = "'hello my name is bob'";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          type: "StringLiteral",
+          value: "hello my name is bob",
+        },
+      ],
+      type: "Program",
+    });
+  });
+
+  test("for double quote strings", () => {
+    const input = '"hello my name is bob"';
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          type: "StringLiteral",
+          value: "hello my name is bob",
+        },
+      ],
+      type: "Program",
+    });
+  });
 });

@@ -300,6 +300,11 @@ class Parser {
           type: "NumericLiteral",
           value: parseFloat(this.next().value),
         };
+      case "StringLiteral":
+        return {
+          type: "StringLiteral",
+          value: this.next().value.slice(1, -1), // get rid of quotation marks
+        };
       case "OpenParen":
         this.next(); // move to the token after the '('
         const value = this.parseExpr();
