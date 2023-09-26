@@ -1,1 +1,2 @@
-let print = 5
+let x = 5
+x+5
