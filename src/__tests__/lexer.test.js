@@ -104,4 +104,30 @@ describe("Lexer test", () => {
       },
     ]);
   });
+
+  test("for single quoted strings", () => {
+    const input = "'hello my name is bob'";
+    expect(lexer(input)).toEqual([
+      { type: "StringLiteral", value: "'hello my name is bob'" },
+      { type: "EOF", value: "EOF" },
+    ]);
+  });
+
+  test("for double quoted strings", () => {
+    const input = '"hello my name is bob"';
+    expect(lexer(input)).toEqual([
+      { type: "StringLiteral", value: '"hello my name is bob"' },
+      { type: "EOF", value: "EOF" },
+    ]);
+  });
+
+  test("for double quoted strings missing closing quote", () => {
+    const input = '"hello my name is bob';
+    expect(() => lexer(input)).toThrowError("Missing closing double quote");
+  });
+
+  test("for single quoted strings missing closing quote", () => {
+    const input = "'hello my name is bob";
+    expect(() => lexer(input)).toThrowError("Missing closing single quote");
+  });
 });
