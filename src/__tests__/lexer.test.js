@@ -51,4 +51,57 @@ describe("Lexer test", () => {
       lexer(input);
     }).toThrowError("Unrecognized character found in source: $");
   });
+
+  test("Test for function declarations", () => {
+    const input = "fn add(x,y){x+y}";
+    expect(lexer(input)).toEqual([
+      { type: "Function", value: "fn" },
+      { type: "Identifier", value: "add" },
+      { type: "OpenParen", value: "(" },
+      { type: "Identifier", value: "x" },
+      { type: "Comma", value: "," },
+      { type: "Identifier", value: "y" },
+      { type: "CloseParen", value: ")" },
+      { type: "OpenCurly", value: "{" },
+      { type: "Identifier", value: "x" },
+      { type: "BinaryOperator", value: "+" },
+      { type: "Identifier", value: "y" },
+      { type: "CloseCurly", value: "}" },
+      { type: "EOF", value: "EOF" },
+    ]);
+  });
+
+  test("Function calls", () => {
+    const input = "add(1,2)";
+    expect(lexer(input)).toEqual([
+      {
+        type: "Identifier",
+        value: "add",
+      },
+      {
+        type: "OpenParen",
+        value: "(",
+      },
+      {
+        type: "Number",
+        value: "1",
+      },
+      {
+        type: "Comma",
+        value: ",",
+      },
+      {
+        type: "Number",
+        value: "2",
+      },
+      {
+        type: "CloseParen",
+        value: ")",
+      },
+      {
+        type: "EOF",
+        value: "EOF",
+      },
+    ]);
+  });
 });
