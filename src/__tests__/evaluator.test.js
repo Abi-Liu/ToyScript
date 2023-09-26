@@ -75,6 +75,50 @@ describe("Evaluator Tests", () => {
   test("function declarations", () => {
     const input = "fn add(x,y){x+y}";
     const result = parser.produceAST(input);
-    expect(evaluate(result, env)).toEqual({});
+    expect(evaluate(result, env)).toEqual(undefined);
+  });
+
+  test("function calls", () => {
+    const input = "fn add(x,y){x+y} add(1,2)";
+    const result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: 3 });
+  });
+
+  test("Object assignments", () => {
+    const input = "let  x = {one: 1, two: {three: 3}}";
+    const result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      properties: new Map([
+        [
+          "one",
+          {
+            type: "number",
+            value: 1,
+          },
+        ],
+        [
+          "two",
+          {
+            properties: new Map([
+              [
+                "three",
+                {
+                  type: "number",
+                  value: 3,
+                },
+              ],
+            ]),
+            type: "object",
+          },
+        ],
+      ]),
+      type: "object",
+    });
+  });
+
+  test("for member access", () => {
+    const input = "let  x = {one: 1, two: {three: 3}} x.two.three";
+    const result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: 3 });
   });
 });
