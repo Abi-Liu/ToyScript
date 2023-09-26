@@ -146,7 +146,7 @@ function evaluateCallExpr(expr, env) {
     return result;
   }
 
-  // throw `Cannot call a value that is not a function ${fn}`;
+  throw `Cannot call a value that is not a function ${fn}`;
 }
 
 function evaluate(ast, env) {
