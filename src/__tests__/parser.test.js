@@ -188,4 +188,67 @@ describe("Parser tests", () => {
       type: "Program",
     });
   });
+
+  test("for function declarations", () => {
+    const input = "fn add(x,y){x+y}";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          body: [
+            {
+              left: {
+                symbol: "x",
+                type: "Identifier",
+              },
+              operator: "+",
+              right: {
+                symbol: "y",
+                type: "Identifier",
+              },
+              type: "BinaryExpr",
+            },
+          ],
+          name: "add",
+          parameters: [
+            {
+              symbol: "x",
+              type: "Identifier",
+            },
+            {
+              symbol: "y",
+              type: "Identifier",
+            },
+          ],
+          type: "FunctionDeclaration",
+        },
+      ],
+      type: "Program",
+    });
+  });
+
+  test("function calls", () => {
+    const input = "add(1,2)";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          args: [
+            {
+              type: "NumericLiteral",
+              value: 1,
+            },
+            {
+              type: "NumericLiteral",
+              value: 2,
+            },
+          ],
+          caller: {
+            symbol: "add",
+            type: "Identifier",
+          },
+          type: "CallExpr",
+        },
+      ],
+      type: "Program",
+    });
+  });
 });
