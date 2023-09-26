@@ -1,5 +1,2 @@
-fn add(x, y){
-    x+y
-}
-
-add(1,2)
+let x = 5
+print(x)

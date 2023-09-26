@@ -121,22 +121,32 @@ function evaluateCallExpr(expr, env) {
   const args = expr.args.map((arg) => evaluate(arg, env));
   const fn = evaluate(expr.caller, env);
 
-  // here is where we create a new scope for the function run time. it's parent env is the scope in which it was declared in.
-  const scope = new Environment(fn.env);
-  // for loop to declare the arguments as variables in the new scope
-  for (let i = 0; i < fn.parameters.length; i++) {
-    const name = fn.parameters[i];
-    scope.declareVar(name.symbol, args[i], false);
+  // check for native functions
+  if (fn.type === "NativeFunction") {
+    const result = fn.call(args, env);
+    return result;
   }
 
-  // in case function body is empty
-  let result = { type: "null", value: "null" };
-  // evaluates the body line by line
-  for (const stmt of fn.body) {
-    result = evaluate(stmt, scope);
+  if (fn.type === "FunctionDeclaration") {
+    // here is where we create a new scope for the function run time. it's parent env is the scope in which it was declared in.
+    const scope = new Environment(fn.env);
+    // for loop to declare the arguments as variables in the new scope
+    for (let i = 0; i < fn.parameters.length; i++) {
+      const name = fn.parameters[i];
+      scope.declareVar(name.symbol, args[i], false);
+    }
+
+    // in case function body is empty
+    let result = { type: "null", value: "null" };
+    // evaluates the body line by line
+    for (const stmt of fn.body) {
+      result = evaluate(stmt, scope);
+    }
+    // the final line in the body is what will be returned.
+    return result;
   }
-  // the final line in the body is what will be returned.
-  return result;
+
+  throw `Cannot call a value that is not a function ${fn}`;
 }
 
 function evaluate(ast, env) {
