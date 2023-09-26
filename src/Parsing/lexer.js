@@ -33,6 +33,14 @@ function isInt(str) {
   return c >= bounds[0] && c <= bounds[1];
 }
 
+function isQuotation(str) {
+  return str === '"';
+}
+
+function isApostrophe(str) {
+  return str === "'";
+}
+
 // given a string, produce and return an array of tokens.
 
 function tokenize(sourceCode) {
@@ -76,6 +84,43 @@ function tokenize(sourceCode) {
     }
     // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
     else {
+      // Handle String literals
+      if (isQuotation(src[0])) {
+        let str = src.shift();
+        while (src.length > 0 && !isQuotation(src[0])) {
+          str += src.shift();
+        }
+
+        if (src.length > 0) {
+          str += src.shift(); // Include the closing double quote in the token
+        } else {
+          throw new Error("Missing closing double quote");
+        }
+
+        tokens.push(token(str, "StringLiteral"));
+        // if src is empty, break from the loop
+        if (src.length === 0) {
+          break;
+        }
+      }
+      if (isApostrophe(src[0])) {
+        let str = src.shift();
+        while (src.length > 0 && !isApostrophe(src[0])) {
+          str += src.shift();
+        }
+
+        if (src.length > 0) {
+          str += src.shift(); // Include the closing single quote in the token
+        } else {
+          throw new Error("Missing closing single quote");
+        }
+
+        tokens.push(token(str, "StringLiteral"));
+        // if src is empty, break from the loop
+        if (src.length === 0) {
+          break;
+        }
+      }
       // Handle numeric literals -> Integers
       if (isInt(src[0])) {
         let num = "";

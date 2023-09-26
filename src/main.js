@@ -2,6 +2,7 @@ const repl = require("repl");
 const Parser = require("./Parsing/parser");
 const evaluate = require("./Runtime/evaluator");
 const Environment = require("./Runtime/environment");
+const lexer = require("./Parsing/lexer");
 const fs = require("fs");
 
 const env = new Environment(null);
@@ -34,5 +35,7 @@ const filePath = "./test.txt"; // Replace with the path to your text file
 const fileContent = fs.readFileSync(filePath, "utf-8");
 
 // Parse and evaluate the content of the text file
-const program = parser.produceAST(fileContent);
-const result = evaluate(program, env);
+// const program = parser.produceAST(fileContent);
+// const result = evaluate(program, env);
+
+console.log(lexer('"hello"'));
