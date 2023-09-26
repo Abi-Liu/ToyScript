@@ -106,7 +106,7 @@ function evaluateMember(member, env) {
 
 function evaluateFunctionDeclaration(declaration, env) {
   const fn = {
-    type: "function",
+    type: "FunctionDeclaration",
     name: declaration.name,
     parameters: declaration.parameters,
     body: declaration.body,
@@ -146,7 +146,7 @@ function evaluateCallExpr(expr, env) {
     return result;
   }
 
-  throw `Cannot call a value that is not a function ${fn}`;
+  // throw `Cannot call a value that is not a function ${fn}`;
 }
 
 function evaluate(ast, env) {

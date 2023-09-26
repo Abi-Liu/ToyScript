@@ -1,2 +1,6 @@
-let x = 5
-x+5
+fn add(x,y){
+    x+y
+}
+
+let x = add(1,2)
+print(x)
