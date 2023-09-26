@@ -121,4 +121,31 @@ describe("Evaluator Tests", () => {
     const result = parser.produceAST(input);
     expect(evaluate(result, env)).toEqual({ type: "number", value: 3 });
   });
+
+  test("For strings", () => {
+    const input = "'hello bob'";
+    const result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "string",
+      value: "hello bob",
+    });
+  });
+
+  test("For string assignments", () => {
+    const input = "let x = 'hello bob' x";
+    const result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "string",
+      value: "hello bob",
+    });
+  });
+
+  test("For adding strings", () => {
+    const input = "let x = 'hello bob' x+'! How are you?'";
+    const result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "string",
+      value: "hello bob! How are you?",
+    });
+  });
 });

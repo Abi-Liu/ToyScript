@@ -1,7 +1,7 @@
 const Environment = require("./environment");
 
 function evaluateProgram(program, env) {
-  let lastEvaluated = { type: "null", value: "null" };
+  let lastEvaluated = { type: "null", value: null };
 
   // evaluates each child node in the AST
   for (const statement of program.body) {
@@ -20,9 +20,22 @@ function evaluateBinary(binary, env) {
   // makes sure that both left and right hand side are number values
   if (left.type === "number" && right.type === "number") {
     return evaluateNumericBinary(left, right, binary.operator);
+  } else if (left.type === "string" && right.type === "string") {
+    return evaluateStringBinary(left, right, binary.operator);
   } else {
-    return { type: "null", value: "null" };
+    return { type: "null", value: null };
   }
+}
+
+function evaluateStringBinary(left, right, operator) {
+  let str = "";
+  if (operator === "+") {
+    str = left.value + right.value;
+  } else {
+    str = { type: "null", value: null };
+  }
+
+  return { value: str, type: "string" };
 }
 
 function evaluateNumericBinary(left, right, operator) {
@@ -137,7 +150,7 @@ function evaluateCallExpr(expr, env) {
     }
 
     // in case function body is empty
-    let result = { type: "null", value: "null" };
+    let result = { type: "null", value: null };
     // evaluates the body line by line
     for (const stmt of fn.body) {
       result = evaluate(stmt, scope);
@@ -153,6 +166,9 @@ function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
       return { type: "number", value: ast.value };
+
+    case "StringLiteral":
+      return { type: "string", value: ast.value };
 
     case "Identifier":
       return evaluateIdentifier(ast, env);
