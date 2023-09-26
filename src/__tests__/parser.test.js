@@ -277,4 +277,25 @@ describe("Parser tests", () => {
       type: "Program",
     });
   });
+
+  test("adding strings", () => {
+    const input = '"hello" + "bob"';
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: {
+            type: "StringLiteral",
+            value: "hello",
+          },
+          operator: "+",
+          right: {
+            type: "StringLiteral",
+            value: "bob",
+          },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+  });
 });
