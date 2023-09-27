@@ -191,7 +191,7 @@ class Parser {
       const operator = this.next().value;
       const right = this.parseComparisonExpr();
       left = {
-        type: "BinaryExpr",
+        type: "LogicalExpr",
         left,
         right,
         operator,
@@ -209,7 +209,7 @@ class Parser {
       const operator = this.next().value;
       const right = this.parseAdditiveExpr();
       left = {
-        type: "BinaryExpr",
+        type: "ComparisonExpr",
         left,
         right,
         operator,

@@ -63,6 +63,14 @@ function evaluateNumericBinary(left, right, operator) {
   return { value: res, type: "number" };
 }
 
+function evaluateUnary(unary, env) {
+  if (unary.operator === "!") {
+    const operand = evaluate(unary.operand, env);
+    const result = !operand.value;
+    return { type: "boolean", value: result };
+  }
+}
+
 function evaluateIdentifier(identifier, env) {
   const val = env.get(identifier.symbol);
   return val;
@@ -175,6 +183,9 @@ function evaluate(ast, env) {
 
     case "BinaryExpr":
       return evaluateBinary(ast, env);
+
+    case "UnaryExpr":
+      return evaluateUnary(ast, env);
 
     case "VariableDeclaration":
       return evaluateVarDeclaration(ast, env);
