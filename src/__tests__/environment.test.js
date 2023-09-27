@@ -19,6 +19,11 @@ describe("Environment tests", () => {
     });
   });
 
+  test("testing scope", () => {
+    const scope = new Environment(env);
+    expect(scope.parent).toEqual(env);
+  });
+
   test("declaring a constant number variable", () => {
     env.declareVar("x", { value: 34, type: "number" }, true);
     expect(env.variables.has("x")).toBe(true);
@@ -44,5 +49,32 @@ describe("Environment tests", () => {
 
     env.assignVar("x", { value: 55, type: "number" });
     expect(env.variables.get("x")).toEqual({ value: 55, type: "number" });
+  });
+
+  test("lookup defined variable", () => {
+    env.declareVar("x", { value: 34, type: "number" }, false);
+
+    expect(env.lookup("x")).toEqual(env);
+  });
+
+  test("lookup undefined variable", () => {
+    expect(() => {
+      env.lookup("x");
+    }).toThrowError();
+  });
+
+  test("lookup variable in an outer scope", () => {
+    env.declareVar("x", { value: 34, type: "number" }, false);
+    const scope = new Environment(env);
+
+    expect(scope.lookup("x")).toEqual(env);
+  });
+
+  test("lookup variable in an inner scope", () => {
+    const scope = new Environment(env);
+    scope.declareVar("x", { value: 34, type: "number" }, false);
+    expect(() => {
+      env.lookup("x");
+    }).toThrowError();
   });
 });
