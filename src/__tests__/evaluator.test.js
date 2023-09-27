@@ -148,4 +148,34 @@ describe("Evaluator Tests", () => {
       value: "hello bob! How are you?",
     });
   });
+
+  test("For Unary expressions", () => {
+    let input = "!false";
+    let result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = "!true";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = '!"x"';
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "!1";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+  });
 });
