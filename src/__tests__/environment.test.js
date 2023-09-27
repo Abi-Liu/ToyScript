@@ -77,4 +77,9 @@ describe("Environment tests", () => {
       env.lookup("x");
     }).toThrowError();
   });
+
+  test("get variable", () => {
+    env.declareVar("x", { value: 34, type: "number" }, false);
+    expect(env.get("x")).toEqual({ type: "number", value: 34 });
+  });
 });
