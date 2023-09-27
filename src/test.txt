@@ -1,2 +1,2 @@
-let x = true
+let x = -5
 print(x)

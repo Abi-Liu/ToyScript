@@ -156,7 +156,7 @@ class Parser {
 
   parseObjectExpr() {
     if (this.at().type !== "OpenCurly") {
-      return this.parseAdditiveExpr();
+      return this.parseLogicalExpr();
     }
     this.next(); // move past '{'
     const properties = [];
@@ -183,6 +183,42 @@ class Parser {
   // primary expression -> unary -> Multiplicative -> additive -> comparisons -> logical
   // the more precedence an expression has, the further down the tree we want to parse it
 
+  // Logical expressions || &&
+  parseLogicalExpr() {
+    let left = this.parseComparisonExpr();
+
+    while (this.at().type == "LogicalOperator") {
+      const operator = this.next().value;
+      const right = this.parseComparisonExpr();
+      left = {
+        type: "BinaryExpr",
+        left,
+        right,
+        operator,
+      };
+    }
+
+    return left;
+  }
+
+  // Comparison expressions == >= < etc.
+  parseComparisonExpr() {
+    let left = this.parseAdditiveExpr();
+
+    while (this.at().type == "ComparisonOperator") {
+      const operator = this.next().value;
+      const right = this.parseAdditiveExpr();
+      left = {
+        type: "BinaryExpr",
+        left,
+        right,
+        operator,
+      };
+    }
+
+    return left;
+  }
+
   // + - binary expressions
   // because this has the less precendence than multiplication, we the left hand side will call parseMultiplicativeExpr. If the expression is not a multiplication expression, then it will just return the original left hand value.
   parseAdditiveExpr() {
@@ -206,7 +242,7 @@ class Parser {
   // because primary expressions have the most precedence, we will call that to be the left value
 
   parseMultiplicativeExpr() {
-    let left = this.parseCallMemberExpr();
+    let left = this.parseUnaryExpr();
 
     while (
       this.at().value == "*" ||
@@ -214,7 +250,7 @@ class Parser {
       this.at().value === "%"
     ) {
       const operator = this.next().value;
-      const right = this.parseCallMemberExpr();
+      const right = this.parseUnaryExpr();
       left = {
         type: "BinaryExpr",
         left,
@@ -224,6 +260,20 @@ class Parser {
     }
 
     return left;
+  }
+
+  // Unary Operators ! -
+  parseUnaryExpr() {
+    if (this.at().type === "UnaryOperator") {
+      const operator = this.next().value;
+      const operand = this.parseUnaryExpr(); // recursively parse operand for cases like !(x+1)
+      return {
+        type: "UnaryExpr",
+        operator,
+        operand,
+      };
+    }
+    return this.parseCallMemberExpr();
   }
 
   // example: foo.bar()

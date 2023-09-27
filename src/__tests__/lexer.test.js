@@ -132,17 +132,17 @@ describe("Lexer test", () => {
   });
 
   test("for logical and conditional operators", () => {
-    const input = "!= <= == >= < > ! && ||";
+    const input = "!= <= == >= < > ! && || ";
     expect(lexer(input)).toEqual([
-      { type: "NotEqualOperator", value: "!=" },
-      { type: "LessOrEqualOperator", value: "<=" },
-      { type: "EqualityOperator", value: "==" },
-      { type: "GreaterOrEqualOperator", value: ">=" },
-      { type: "LessThanOperator", value: "<" },
-      { type: "GreaterThanOperator", value: ">" },
-      { type: "NotOperator", value: "!" },
-      { type: "AndOperator", value: "&&" },
-      { type: "OrOperator", value: "||" },
+      { type: "ComparisonOperator", value: "!=" },
+      { type: "ComparisonOperator", value: "<=" },
+      { type: "ComparisonOperator", value: "==" },
+      { type: "ComparisonOperator", value: ">=" },
+      { type: "ComparisonOperator", value: "<" },
+      { type: "ComparisonOperator", value: ">" },
+      { type: "UnaryOperator", value: "!" },
+      { type: "LogicalOperator", value: "&&" },
+      { type: "LogicalOperator", value: "||" },
       { type: "EOF", value: "EOF" },
     ]);
   });

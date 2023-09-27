@@ -73,23 +73,23 @@ function tokenize(sourceCode) {
       tokens.push(token(src.shift(), "BinaryOperator"));
     } // Handle Assignment, Logical, and ConditionalTokens
     else if (src[0] === "=" && src[1] === "=") {
-      tokens.push(token(src.shift() + src.shift(), "EqualityOperator"));
+      tokens.push(token(src.shift() + src.shift(), "ComparisonOperator"));
     } else if (src[0] === ">" && src[1] === "=") {
-      tokens.push(token(src.shift() + src.shift(), "GreaterOrEqualOperator"));
+      tokens.push(token(src.shift() + src.shift(), "ComparisonOperator"));
     } else if (src[0] === "<" && src[1] === "=") {
-      tokens.push(token(src.shift() + src.shift(), "LessOrEqualOperator"));
+      tokens.push(token(src.shift() + src.shift(), "ComparisonOperator"));
     } else if (src[0] == "<") {
-      tokens.push(token(src.shift(), "LessThanOperator"));
+      tokens.push(token(src.shift(), "ComparisonOperator"));
     } else if (src[0] == ">") {
-      tokens.push(token(src.shift(), "GreaterThanOperator"));
+      tokens.push(token(src.shift(), "ComparisonOperator"));
     } else if (src[0] === "!" && src[1] == "=") {
-      tokens.push(token(src.shift() + src.shift(), "NotEqualOperator"));
+      tokens.push(token(src.shift() + src.shift(), "ComparisonOperator"));
     } else if (src[0] === "!") {
-      tokens.push(token(src.shift(), "NotOperator"));
+      tokens.push(token(src.shift(), "UnaryOperator"));
     } else if (src[0] == "&" && src[1] == "&") {
-      tokens.push(token(src.shift() + src.shift(), "AndOperator"));
+      tokens.push(token(src.shift() + src.shift(), "LogicalOperator"));
     } else if (src[0] == "|" && src[1] == "|") {
-      tokens.push(token(src.shift() + src.shift(), "OrOperator"));
+      tokens.push(token(src.shift() + src.shift(), "LogicalOperator"));
     } else if (src[0] == "=") {
       tokens.push(token(src.shift(), "Equals"));
     } else if (src[0] == ";") {

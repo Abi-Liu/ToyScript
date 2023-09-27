@@ -298,4 +298,130 @@ describe("Parser tests", () => {
       type: "Program",
     });
   });
+
+  test("For logical operators", () => {
+    let input = "true || true";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { symbol: "true", type: "Identifier" },
+          operator: "||",
+          right: { symbol: "true", type: "Identifier" },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "true && true";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { symbol: "true", type: "Identifier" },
+          operator: "&&",
+          right: { symbol: "true", type: "Identifier" },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+  });
+
+  test("For comparison expressions", () => {
+    let input = "5 > 2";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { type: "NumericLiteral", value: 5 },
+          operator: ">",
+          right: { type: "NumericLiteral", value: 2 },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+    input = "5 == 2";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { type: "NumericLiteral", value: 5 },
+          operator: "==",
+          right: { type: "NumericLiteral", value: 2 },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "5!=2";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { type: "NumericLiteral", value: 5 },
+          operator: "!=",
+          right: { type: "NumericLiteral", value: 2 },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "5>= 2";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { type: "NumericLiteral", value: 5 },
+          operator: ">=",
+          right: { type: "NumericLiteral", value: 2 },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "5<=2";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { type: "NumericLiteral", value: 5 },
+          operator: "<=",
+          right: { type: "NumericLiteral", value: 2 },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "5<2";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: { type: "NumericLiteral", value: 5 },
+          operator: "<",
+          right: { type: "NumericLiteral", value: 2 },
+          type: "BinaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+  });
+
+  test("Unary operator", () => {
+    input = "!(5*2)";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          operand: {
+            left: { type: "NumericLiteral", value: 5 },
+            operator: "*",
+            right: { type: "NumericLiteral", value: 2 },
+            type: "BinaryExpr",
+          },
+          operator: "!",
+          type: "UnaryExpr",
+        },
+      ],
+      type: "Program",
+    });
+  });
 });
