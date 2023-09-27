@@ -35,7 +35,5 @@ const filePath = "./test.txt"; // Replace with the path to your text file
 const fileContent = fs.readFileSync(filePath, "utf-8");
 
 // Parse and evaluate the content of the text file
-// const program = parser.produceAST(fileContent);
-// const result = evaluate(program, env);
-
-console.log(lexer('"hello"'));
+const program = parser.produceAST(fileContent);
+const result = evaluate(program, env);

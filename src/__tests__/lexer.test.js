@@ -130,4 +130,20 @@ describe("Lexer test", () => {
     const input = "'hello my name is bob";
     expect(() => lexer(input)).toThrowError("Missing closing single quote");
   });
+
+  test("for logical and conditional operators", () => {
+    const input = "!= <= == >= < > ! && ||";
+    expect(lexer(input)).toEqual([
+      { type: "NotEqualOperator", value: "!=" },
+      { type: "LessOrEqualOperator", value: "<=" },
+      { type: "EqualityOperator", value: "==" },
+      { type: "GreaterOrEqualOperator", value: ">=" },
+      { type: "LessThanOperator", value: "<" },
+      { type: "GreaterThanOperator", value: ">" },
+      { type: "NotOperator", value: "!" },
+      { type: "AndOperator", value: "&&" },
+      { type: "OrOperator", value: "||" },
+      { type: "EOF", value: "EOF" },
+    ]);
+  });
 });

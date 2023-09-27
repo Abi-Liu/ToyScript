@@ -67,11 +67,30 @@ function tokenize(sourceCode) {
       src[0] == "-" ||
       src[0] == "*" ||
       src[0] == "/" ||
-      src[0] == "%"
+      src[0] == "%" ||
+      src[0] === "&&"
     ) {
       tokens.push(token(src.shift(), "BinaryOperator"));
-    } // Handle Conditional & Assignment Tokens
-    else if (src[0] == "=") {
+    } // Handle Assignment, Logical, and ConditionalTokens
+    else if (src[0] === "=" && src[1] === "=") {
+      tokens.push(token(src.shift() + src.shift(), "EqualityOperator"));
+    } else if (src[0] === ">" && src[1] === "=") {
+      tokens.push(token(src.shift() + src.shift(), "GreaterOrEqualOperator"));
+    } else if (src[0] === "<" && src[1] === "=") {
+      tokens.push(token(src.shift() + src.shift(), "LessOrEqualOperator"));
+    } else if (src[0] == "<") {
+      tokens.push(token(src.shift(), "LessThanOperator"));
+    } else if (src[0] == ">") {
+      tokens.push(token(src.shift(), "GreaterThanOperator"));
+    } else if (src[0] === "!" && src[1] == "=") {
+      tokens.push(token(src.shift() + src.shift(), "NotEqualOperator"));
+    } else if (src[0] === "!") {
+      tokens.push(token(src.shift(), "NotOperator"));
+    } else if (src[0] == "&" && src[1] == "&") {
+      tokens.push(token(src.shift() + src.shift(), "AndOperator"));
+    } else if (src[0] == "|" && src[1] == "|") {
+      tokens.push(token(src.shift() + src.shift(), "OrOperator"));
+    } else if (src[0] == "=") {
       tokens.push(token(src.shift(), "Equals"));
     } else if (src[0] == ";") {
       tokens.push(token(src.shift(), "Semicolon"));
