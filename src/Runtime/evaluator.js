@@ -170,6 +170,37 @@ function evaluateCallExpr(expr, env) {
   throw `Cannot call a value that is not a function ${fn}`;
 }
 
+function evaluateLogicalExpr(binary, env) {
+  const left = evaluate(binary.left, env);
+  const right = evaluate(binary.right, env);
+  if (binary.operator === "||") {
+    const value = left || right;
+    return { type: "boolean", value };
+  } else if (binary.operator === "&&") {
+    const value = left && right;
+    return { type: "boolean", value };
+  }
+}
+
+function evaluateComparisonExpr(binary, env) {
+  const left = evaluate(binary.left, env);
+  const right = evaluate(binary.right, env);
+
+  if (binary.operator === "==") {
+    return { type: "boolean", value: left.value === right.value };
+  } else if (binary.operator === "!=") {
+    return { type: "boolean", value: left.value !== right.value };
+  } else if (binary.operator === "<") {
+    return { type: "boolean", value: left.value < right.value };
+  } else if (binary.operator === ">") {
+    return { type: "boolean", value: left.value > right.value };
+  } else if (binary.operator === "<=") {
+    return { type: "boolean", value: left.value <= right.value };
+  } else if (binary.operator === ">=") {
+    return { type: "boolean", value: left.value >= right.value };
+  }
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -183,6 +214,12 @@ function evaluate(ast, env) {
 
     case "BinaryExpr":
       return evaluateBinary(ast, env);
+
+    case "LogicalExpr":
+      return evaluateLogicalExpr(ast, env);
+
+    case "ComparisonExpr":
+      return evaluateComparisonExpr(ast, env);
 
     case "UnaryExpr":
       return evaluateUnary(ast, env);
