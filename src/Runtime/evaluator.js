@@ -207,17 +207,8 @@ function evaluateIfStatement(statement, env) {
   let ifCondition = evaluate(statement.condition, env).value;
   // if true we go into the if body.
   if (ifCondition) {
-    // create a new scope for the block statement
-    const scope = new Environment(env);
-    let result;
-
-    // go through and evaluate each line.
-    for (const stmt of statement.ifBody) {
-      result = evaluate(stmt, scope);
-    }
-
     // return result thus breaking out of the rest of the conditions if there are any
-    return result;
+    return evaluateBlock(statement.ifBody, env);
   }
 
   // now we need to go through the elseif branches
@@ -226,19 +217,30 @@ function evaluateIfStatement(statement, env) {
     const condition = evaluate(branch.condition, env).value;
     // if true go into the the body of that branch
     if (condition) {
-      // create a new scope for the block statement
-      const scope = new Environment(env);
-      let result;
-
-      // go through and evaluate each line.
-      for (const stmt of branch.body) {
-        result = evaluate(stmt, scope);
-      }
-
-      // return result thus breaking out of the rest of the conditions if there are any
-      return result;
+      // evaluates the block statement and returns the value, thus breaking out of the if statements
+      return evaluateBlock(branch.body, env);
     }
   }
+
+  // now we check to see if there is an else branch
+  if (statement.elseBlock) {
+    // inside we just evaluate the else block and return the value, since all other cases failed.
+    return evaluateBlock(statement.elseBlock, env);
+  }
+}
+
+function evaluateBlock(block, env) {
+  // create a new scope for the block statement
+  const scope = new Environment(env);
+
+  let result;
+
+  // go through and evaluate each line
+  for (const stmt of block) {
+    result = evaluate(stmt, scope);
+  }
+
+  return result;
 }
 
 function evaluate(ast, env) {
