@@ -202,6 +202,45 @@ function evaluateComparisonExpr(binary, env) {
   }
 }
 
+function evaluateIfStatement(statement, env) {
+  // evaluate the if() condition
+  let ifCondition = evaluate(statement.condition, env).value;
+  // if true we go into the if body.
+  if (ifCondition) {
+    // create a new scope for the block statement
+    const scope = new Environment(env);
+    let result;
+
+    // go through and evaluate each line.
+    for (const stmt of statement.ifBody) {
+      result = evaluate(stmt, scope);
+    }
+
+    // return result thus breaking out of the rest of the conditions if there are any
+    return result;
+  }
+
+  // now we need to go through the elseif branches
+  for (const branch of statement.elseIfBlocks) {
+    // evaluate each condition
+    const condition = evaluate(branch.condition, env).value;
+    // if true go into the the body of that branch
+    if (condition) {
+      // create a new scope for the block statement
+      const scope = new Environment(env);
+      let result;
+
+      // go through and evaluate each line.
+      for (const stmt of branch.body) {
+        result = evaluate(stmt, scope);
+      }
+
+      // return result thus breaking out of the rest of the conditions if there are any
+      return result;
+    }
+  }
+}
+
 function evaluate(ast, env) {
   switch (ast.type) {
     case "NumericLiteral":
@@ -242,6 +281,9 @@ function evaluate(ast, env) {
 
     case "CallExpr":
       return evaluateCallExpr(ast, env);
+
+    case "IfStatement":
+      return evaluateIfStatement(ast, env);
 
     case "Program":
       return evaluateProgram(ast, env);

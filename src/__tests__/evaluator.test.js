@@ -286,5 +286,12 @@ describe("Evaluator Tests", () => {
       type: "boolean",
       value: true,
     });
+
+    input = '"hi" != "bye" && true == true';
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
   });
 });
