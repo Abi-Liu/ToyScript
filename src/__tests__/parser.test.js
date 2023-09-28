@@ -190,34 +190,27 @@ describe("Parser tests", () => {
   });
 
   test("for function declarations", () => {
-    const input = "fn add(x,y){x+y}";
+    const input = "fn add(x,y){let sum =x+y}";
     expect(parser.produceAST(input)).toEqual({
       body: [
         {
           body: [
             {
-              left: {
-                symbol: "x",
-                type: "Identifier",
+              constant: false,
+              identifier: "sum",
+              type: "VariableDeclaration",
+              value: {
+                left: { symbol: "x", type: "Identifier" },
+                operator: "+",
+                right: { symbol: "y", type: "Identifier" },
+                type: "BinaryExpr",
               },
-              operator: "+",
-              right: {
-                symbol: "y",
-                type: "Identifier",
-              },
-              type: "BinaryExpr",
             },
           ],
           name: "add",
           parameters: [
-            {
-              symbol: "x",
-              type: "Identifier",
-            },
-            {
-              symbol: "y",
-              type: "Identifier",
-            },
+            { symbol: "x", type: "Identifier" },
+            { symbol: "y", type: "Identifier" },
           ],
           type: "FunctionDeclaration",
         },
@@ -320,6 +313,39 @@ describe("Parser tests", () => {
           left: { symbol: "true", type: "Identifier" },
           operator: "&&",
           right: { symbol: "true", type: "Identifier" },
+          type: "LogicalExpr",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "(5>3 && 2<5 || 2>1)";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          left: {
+            left: {
+              left: { type: "NumericLiteral", value: 5 },
+              operator: ">",
+              right: { type: "NumericLiteral", value: 3 },
+              type: "ComparisonExpr",
+            },
+            operator: "&&",
+            right: {
+              left: { type: "NumericLiteral", value: 2 },
+              operator: "<",
+              right: { type: "NumericLiteral", value: 5 },
+              type: "ComparisonExpr",
+            },
+            type: "LogicalExpr",
+          },
+          operator: "||",
+          right: {
+            left: { type: "NumericLiteral", value: 2 },
+            operator: ">",
+            right: { type: "NumericLiteral", value: 1 },
+            type: "ComparisonExpr",
+          },
           type: "LogicalExpr",
         },
       ],

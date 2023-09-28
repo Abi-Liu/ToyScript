@@ -146,4 +146,14 @@ describe("Lexer test", () => {
       { type: "EOF", value: "EOF" },
     ]);
   });
+
+  test("if elseif else keywords", () => {
+    const input = "if elseif else";
+    expect(lexer(input)).toEqual([
+      { type: "IfStatement", value: "if" },
+      { type: "ElseIfStatement", value: "elseif" },
+      { type: "ElseStatement", value: "else" },
+      { type: "EOF", value: "EOF" },
+    ]);
+  });
 });

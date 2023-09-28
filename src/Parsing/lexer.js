@@ -3,6 +3,9 @@ const KEYWORDS = {
   let: "Let",
   const: "Const",
   fn: "Function",
+  if: "IfStatement",
+  elseif: "ElseIfStatement",
+  else: "ElseStatement",
 };
 
 // Returns a token of a given type and value

@@ -35,9 +35,63 @@ class Parser {
         return this.parseVarDeclaration();
       case "Function":
         return this.parseFuncDeclaration();
+      case "IfStatement":
+        return this.parseIfStatement();
       default:
         return this.parseExpr();
     }
+  }
+
+  parseIfStatement() {
+    this.next(); // move past if keyword
+
+    const condition = this.parseExpr();
+    const ifBody = this.parseBlock();
+    // use this to store potential else if statements
+    let elseIfBlocks = [];
+    // stores the final else statement if it exists
+    let elseBlock = null;
+
+    // now we check for elseIf blocks
+    while (this.notEof() && this.at().type === "ElseIfStatement") {
+      this.next(); // move past keyword
+      const elseIfCondition = this.parseExpr();
+      const elseIfBody = this.parseBlock();
+      elseIfBlocks.push({ condition: elseIfCondition, body: elseIfBody });
+    }
+
+    // check for else block
+    if (this.at().type === "ElseStatement") {
+      this.next();
+      elseBlock = this.parseBlock();
+    }
+
+    return {
+      type: "IfStatement",
+      condition,
+      ifBody,
+      elseIfBlocks,
+      elseBlock,
+    };
+  }
+
+  // can be merged with the parseFuncBody. Will do that later
+  parseBlock() {
+    this.expect("OpenCurly", "Missing curly brace to define block body");
+
+    if (this.at().type === "CloseCurly") {
+      throw "Missing block body";
+    }
+
+    while (this.notEof() && this.at().type !== "CloseCurly") {
+      statements.push(this.parseStatement());
+    }
+    this.expect(
+      "CloseCurly",
+      "Missing closing curly brace for block statement"
+    );
+
+    return statements;
   }
 
   parseFuncDeclaration() {
@@ -95,7 +149,7 @@ class Parser {
     }
     const body = [];
     while (this.notEof() && this.at().type !== "CloseCurly") {
-      body.push(this.parseExpr());
+      body.push(this.parseStatement());
     }
     this.expect(
       "CloseCurly",
