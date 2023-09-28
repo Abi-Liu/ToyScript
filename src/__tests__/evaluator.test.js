@@ -280,6 +280,13 @@ describe("Evaluator Tests", () => {
       value: true,
     });
 
+    input = "let x = 1 x != 2";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
     input = '"hi" != "bye"';
     result = parser.produceAST(input);
     expect(evaluate(result, env)).toEqual({
@@ -293,5 +300,34 @@ describe("Evaluator Tests", () => {
       type: "boolean",
       value: true,
     });
+  });
+
+  test("for if statements", () => {
+    let input = "if(5>3){ 5 - 3}";
+    let result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: 2 });
+
+    input = "if(5<3){ 5 - 3}";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "null", value: null });
+
+    // for the case of manipulating variables declared in parent scope
+    input = "let x = 5 if(x > 3){x = 5 - 3} x";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: 2 });
+  });
+
+  test("for if elseif statements", () => {
+    let input = "if(5>3){ 5 - 3} elseif(3>5){ 3-5 }";
+    let result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: 2 });
+
+    input = "if(5<3){ 5 - 3} elseif (5>3){ 3-5}";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: -2 });
+
+    input = `if(5<3){ 5 - 3} elseif (1 >3){ 3-5} elseif(1==2){1+2}elseif(1==1){'one'}`;
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "string", value: "one" });
   });
 });

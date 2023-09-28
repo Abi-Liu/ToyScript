@@ -227,6 +227,9 @@ function evaluateIfStatement(statement, env) {
     // inside we just evaluate the else block and return the value, since all other cases failed.
     return evaluateBlock(statement.elseBlock, env);
   }
+
+  // if no else block and all conditions are false, we return null
+  return { type: "null", value: null };
 }
 
 function evaluateBlock(block, env) {

@@ -63,12 +63,15 @@ class Parser {
     while (this.notEof() && this.at().type === "ElseIfStatement") {
       this.next(); // move past keyword
 
+      // expect parentheses and an expression that evaluates to true/false
       this.expect("OpenParen", "Must enclose condition in parentheses");
 
+      // if no expression, throw error
       if (this.at().type === "CloseParen") {
         throw "Missing conditional statement";
       }
 
+      // parse conditional
       const elseIfCondition = this.parseExpr();
 
       this.expect("CloseParen", "Must enclose condition in parentheses");
