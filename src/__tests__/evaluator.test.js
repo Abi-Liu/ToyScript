@@ -178,4 +178,113 @@ describe("Evaluator Tests", () => {
       value: false,
     });
   });
+
+  test("for logical expressions", () => {
+    let input = "true || false";
+    let result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = "false || false";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "true && false";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "false && false";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "true && true";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+  });
+
+  test("For comparison expression", () => {
+    let input = "5==5";
+    let result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = "5==4";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = '"hi" == "hi"';
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = "5>4";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = "5>=5";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = "5<4";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "5<=4";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "1 != 1";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: false,
+    });
+
+    input = "1 != 2";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+
+    input = '"hi" != "bye"';
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({
+      type: "boolean",
+      value: true,
+    });
+  });
 });

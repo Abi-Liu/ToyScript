@@ -174,10 +174,11 @@ function evaluateLogicalExpr(binary, env) {
   const left = evaluate(binary.left, env);
   const right = evaluate(binary.right, env);
   if (binary.operator === "||") {
-    const value = left || right;
+    const value = left.value || right.value;
+    console.log(value);
     return { type: "boolean", value };
   } else if (binary.operator === "&&") {
-    const value = left && right;
+    const value = left.value && right.value;
     return { type: "boolean", value };
   }
 }
