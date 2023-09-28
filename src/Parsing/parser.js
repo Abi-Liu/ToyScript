@@ -44,8 +44,15 @@ class Parser {
 
   parseIfStatement() {
     this.next(); // move past if keyword
+    this.expect("OpenParen", "Must enclose condition in parentheses");
+    if (this.at().type === "CloseParen") {
+      throw "Missing conditional statement";
+    }
 
     const condition = this.parseExpr();
+
+    this.expect("CloseParen", "Must enclose condition in parentheses");
+
     const ifBody = this.parseBlock();
     // use this to store potential else if statements
     let elseIfBlocks = [];
@@ -55,7 +62,17 @@ class Parser {
     // now we check for elseIf blocks
     while (this.notEof() && this.at().type === "ElseIfStatement") {
       this.next(); // move past keyword
+
+      this.expect("OpenParen", "Must enclose condition in parentheses");
+
+      if (this.at().type === "CloseParen") {
+        throw "Missing conditional statement";
+      }
+
       const elseIfCondition = this.parseExpr();
+
+      this.expect("CloseParen", "Must enclose condition in parentheses");
+
       const elseIfBody = this.parseBlock();
       elseIfBlocks.push({ condition: elseIfCondition, body: elseIfBody });
     }
@@ -82,6 +99,8 @@ class Parser {
     if (this.at().type === "CloseCurly") {
       throw "Missing block body";
     }
+
+    const statements = [];
 
     while (this.notEof() && this.at().type !== "CloseCurly") {
       statements.push(this.parseStatement());

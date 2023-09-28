@@ -450,4 +450,138 @@ describe("Parser tests", () => {
       type: "Program",
     });
   });
+
+  test("For if statements", () => {
+    let input = "if(5 > 2){ true }";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          condition: {
+            left: { type: "NumericLiteral", value: 5 },
+            operator: ">",
+            right: { type: "NumericLiteral", value: 2 },
+            type: "ComparisonExpr",
+          },
+          elseBlock: null,
+          elseIfBlocks: [],
+          ifBody: [{ symbol: "true", type: "Identifier" }],
+          type: "IfStatement",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "if(5 > 2){ let x = 5 x + 3 }";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          condition: {
+            left: { type: "NumericLiteral", value: 5 },
+            operator: ">",
+            right: { type: "NumericLiteral", value: 2 },
+            type: "ComparisonExpr",
+          },
+          elseBlock: null,
+          elseIfBlocks: [],
+          ifBody: [
+            {
+              constant: false,
+              identifier: "x",
+              type: "VariableDeclaration",
+              value: { type: "NumericLiteral", value: 5 },
+            },
+            {
+              left: { symbol: "x", type: "Identifier" },
+              operator: "+",
+              right: { type: "NumericLiteral", value: 3 },
+              type: "BinaryExpr",
+            },
+          ],
+          type: "IfStatement",
+        },
+      ],
+      type: "Program",
+    });
+
+    input = "if(5 > 2) let x = 5 x + 3 }";
+    expect(() => parser.produceAST(input)).toThrowError();
+
+    input = "if(5 > 2) {let x = 5 x + 3 ";
+    expect(() => parser.produceAST(input)).toThrowError();
+
+    input = "if(){ let x = 5 x + 3 }";
+    expect(() => parser.produceAST(input)).toThrowError();
+
+    input =
+      "if(5 > 3){ let x = 5 x + 3 }elseif(5 < 3){ let x = 3 x + 3} elseif(1==2){10 + 2} else { x}";
+    expect(parser.produceAST(input)).toEqual({
+      body: [
+        {
+          condition: {
+            left: { type: "NumericLiteral", value: 5 },
+            operator: ">",
+            right: { type: "NumericLiteral", value: 3 },
+            type: "ComparisonExpr",
+          },
+          elseBlock: [{ symbol: "x", type: "Identifier" }],
+          elseIfBlocks: [
+            {
+              body: [
+                {
+                  constant: false,
+                  identifier: "x",
+                  type: "VariableDeclaration",
+                  value: { type: "NumericLiteral", value: 3 },
+                },
+                {
+                  left: { symbol: "x", type: "Identifier" },
+                  operator: "+",
+                  right: { type: "NumericLiteral", value: 3 },
+                  type: "BinaryExpr",
+                },
+              ],
+              condition: {
+                left: { type: "NumericLiteral", value: 5 },
+                operator: "<",
+                right: { type: "NumericLiteral", value: 3 },
+                type: "ComparisonExpr",
+              },
+            },
+            {
+              body: [
+                {
+                  left: { type: "NumericLiteral", value: 10 },
+                  operator: "+",
+                  right: { type: "NumericLiteral", value: 2 },
+                  type: "BinaryExpr",
+                },
+              ],
+              condition: {
+                left: { type: "NumericLiteral", value: 1 },
+                operator: "==",
+                right: { type: "NumericLiteral", value: 2 },
+                type: "ComparisonExpr",
+              },
+            },
+          ],
+          ifBody: [
+            {
+              constant: false,
+              identifier: "x",
+              type: "VariableDeclaration",
+              value: { type: "NumericLiteral", value: 5 },
+            },
+            {
+              left: { symbol: "x", type: "Identifier" },
+              operator: "+",
+              right: { type: "NumericLiteral", value: 3 },
+              type: "BinaryExpr",
+            },
+          ],
+          type: "IfStatement",
+        },
+      ],
+      type: "Program",
+    });
+  });
 });
