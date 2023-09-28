@@ -330,4 +330,18 @@ describe("Evaluator Tests", () => {
     result = parser.produceAST(input);
     expect(evaluate(result, env)).toEqual({ type: "string", value: "one" });
   });
+
+  test("for if elseif else statements", () => {
+    let input = "if(5<3){ 5 - 3} else { 3-5 }";
+    let result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: -2 });
+
+    input = "if(5<3){ 5 - 3} elseif (5 == 3){ 3-5} else {5*5}";
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "number", value: 25 });
+
+    input = `if(5<3){ 5 - 3} elseif (1 >3){ 3-5} elseif(1==2){1+2}elseif(1==3){'one'} else {'abc'}`;
+    result = parser.produceAST(input);
+    expect(evaluate(result, env)).toEqual({ type: "string", value: "abc" });
+  });
 });

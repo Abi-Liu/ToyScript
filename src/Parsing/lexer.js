@@ -138,13 +138,9 @@ function tokenize(sourceCode) {
         }
 
         tokens.push(token(str, "StringLiteral"));
-        // if src is empty, break from the loop
-        if (src.length === 0) {
-          break;
-        }
       }
       // Handle numeric literals -> Integers
-      if (isInt(src[0])) {
+      else if (isInt(src[0])) {
         let num = "";
         while (src.length > 0 && isInt(src[0])) {
           num += src.shift();
