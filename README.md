@@ -85,10 +85,11 @@ foo
 
 5. Unary Operators
 
+**Note**: There is currently no `-` unary operator. If you would like to reverse the sign of a number, just multiply it by -1
+
 ```javascript
 !
 ```
-**Note**: There is currently no `-` unary operator. If you would like to reverse the sign of a number, just multiply it by -1
 
 6. Conditional Statement
 
@@ -104,13 +105,13 @@ if(conditional1){
 
 7. Function Declaration
 
+**Note**: There is no return statement in this language. The interpreter will automatically return the last statement in the function body
+
 ```javascript
 fn add(x,y){
     x + y
 }
 ```
-
-**Note**: There is no return statement in this language. The interpreter will automatically return the last statement in the function body
 
 8. Call Expression
 
@@ -120,6 +121,8 @@ add(1,2)
 
 9. Variable Declaration
 
+**Note** This language does support both `let` and `const` declaration and behaves much like Javascript. If you want to declare an uninitialized value, you must include a semicolon after the identifier.
+
 ```javascript
 const foo = 12
 let bar = 24
@@ -127,12 +130,10 @@ bar = 1
 let foobar;
 ```
 
-**Note** This language does support both `let` and `const` declaration and behaves much like Javascript. If you want to declare an uninitialized value, you must include a semicolon after the identifier.
-
 10. Native Functions
+
+**Note**: So far the only native function this language has is the print function, which behaves like `console.log()` in Javascript
 
 ```javascript
 print(10)
 ```
-
-**Note**: So far the only native function this language has is the print function, which behaves like `console.log()` in Javascript
