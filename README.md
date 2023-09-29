@@ -94,11 +94,11 @@ foo
 
 ```javascript
 if(conditional1){
-blockStatement
+    blockStatement
 } elseif (conditional2) {
-blockStatement
+    blockStatement
 } else {
-blockStatement
+    blockStatement
 }
 ```
 
@@ -106,7 +106,7 @@ blockStatement
 
 ```javascript
 fn add(x,y){
-x + y
+    x + y
 }
 ```
 
