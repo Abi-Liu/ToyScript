@@ -2,7 +2,7 @@
 
 A mini programming language I'm making from scratch using JavaScript, implementing the basic features of a programming language: closures, variable assignment and declaration, function declaration and calls, numeric, boolean, null, string and object value types, and more!
 
-This project is still a *work in progress* but feel free to take a look around and play with it.
+See my Medium article on my process here: https://medium.com/@abiliu018/how-i-created-my-own-programming-language-from-scratch-9b99fa0a802b
 
 ## Disclaimer
 
