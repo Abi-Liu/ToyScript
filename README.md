@@ -4,6 +4,10 @@ A mini programming language I'm making from scratch using JavaScript, implementi
 
 See my Medium article on my process here: https://medium.com/@abiliu018/how-i-created-my-own-programming-language-from-scratch-9b99fa0a802b
 
+## Demo
+
+![ToyScript Demo](Demo/demo.gif)
+
 ## Disclaimer
 
 The goal of this project is not to create the next big programming language or a super fast interpreter. Instead, the goal is to deepen my fundamental understanding of how programming languages work by building my own version of one.
