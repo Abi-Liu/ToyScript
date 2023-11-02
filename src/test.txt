@@ -1,11 +1,3 @@
-let x = 5
-let y = 10
-
-fn add(a, b){
-    a+b
-}
-print(add(x,y))
-
 fn fizzbuzz(end, i){
     if(i % 15 == 0){
         print('fizzbuzz')
