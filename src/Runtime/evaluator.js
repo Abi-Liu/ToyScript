@@ -294,8 +294,7 @@ function evaluate(ast, env) {
       return evaluateProgram(ast, env);
 
     default:
-      console.error(`Unrecognized AST Node: ${ast}`);
-      process.exit(1);
+      throw `Unrecognized AST Node: ${ast}`;
   }
 }
 

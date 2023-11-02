@@ -1,2 +1,25 @@
 let x = 5
-print(x)
+let y = 10
+
+fn add(a, b){
+    a+b
+}
+print(add(x,y))
+
+fn fizzbuzz(end, i){
+    if(i % 15 == 0){
+        print('fizzbuzz')
+    } elseif(i % 5 == 0){
+        print('fizz')
+    } elseif(i % 3 == 0){
+        print('buzz')
+    } else {
+        print(i)
+    }
+
+    if(i < end){
+        fizzbuzz(end, i+1)
+    }
+}
+
+fizzbuzz(15, 1)
